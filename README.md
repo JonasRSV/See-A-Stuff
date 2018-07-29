@@ -13,7 +13,7 @@ To try it out.
   3. Run: pip3 install -r requirements.txt
   4. Place the camera in whichever position you want it. It is important that the background is static.
   5. Run: python3 stuffseer.py -record
-  6. Let walk around just as one would normally do infront of the camera for a while until the program exits.
+  6. Let someone walk around just as one would normally do in front of the camera for a while, until the program exits.
   7. Repeat 6 with as many people as you want, preferably with the same people during different times of the day with different clothes and ligthing for better results.
   8. Run: python3 stuffseer -train
   9. Run: python3 stuffseer -see (This has not been finished yet)
