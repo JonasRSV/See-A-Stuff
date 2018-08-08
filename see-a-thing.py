@@ -18,7 +18,7 @@ def main():
                         help="record labeled data with: --record XXX",
                         type=str)
 
-    parser.add_argument("-f", "--frequency",
+    parser.add_argument("-f", "--max_frequency",
                         help="Frequency camera should run at in Hz",
                         type=float)
 
@@ -59,31 +59,31 @@ def main():
         train(path)
 
     if args.live:
-        live(args.time, args.frequency, args.display)
+        live(args.time, args.max_frequency, args.display)
 
-    frequency = args.frequency if args.frequency else DEFAULT_FREQ
+    max_frequency = args.max_frequency if args.max_frequency else DEFAULT_FREQ
     time      = args.time if args.time else DEFAULT_TIME
 
     if args.record:
-        record(args.record, time, frequency, args.display, path)
+        record(args.record, time, max_frequency, args.display, path)
 
 
-def record(label, time, frequency, display, path):
+def record(label, time, max_frequency, display, path):
     #####################################
     # Record the data used for training #
     #####################################
-    camera_feed = sat.camera.camera_feed(time, frequency, display)
+    camera_feed = sat.camera.camera_feed(time, max_frequency, display)
     sat.train.record(label, camera_feed, path)
     sys.exit(0)
 
-def live(time, frequency, display):
-    print("Live at freq {} for {}".format(frequency, time))
+def live(time, max_frequency, display):
+    print("Live at freq {} for {}".format(max_frequency, time))
 
     ###########################################
     # Update frequency of 10 times per second #
     ###########################################
-    if not frequency:
-        frequency = 10
+    if not max_frequency:
+        max_frequency = 10
 
     ############
     # One Hour #
@@ -91,7 +91,7 @@ def live(time, frequency, display):
     if not time:
         time = 3600
 
-    camera_feed    = sat.camera.camera_feed(time, frequency, display)
+    camera_feed    = sat.camera.camera_feed(time, max_frequency, display)
     predictor_feed = sat.live.predictor_feed(camera_feed)
 
     sat.live.demo_display(predictor_feed)

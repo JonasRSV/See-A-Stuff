@@ -2,13 +2,13 @@ import cv2
 import see_a_thing.common as common
 import time as time_module
 
-def camera_feed(time, frequency, display=True):
+def camera_feed(time, max_frequency, display=True):
     #################################
     # Time in seconds to record     #
     # Frequency in Hz to record in  #
     #################################
     record_until   = time_module.time() + time
-    sleep_duration = 1 / frequency
+    sleep_duration = 1 / max_frequency
 
     capture = cv2.VideoCapture(0)
     try:
