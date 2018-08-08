@@ -2,6 +2,7 @@ import argparse
 import see_a_thing as sat
 import sys
 
+
 DEFAULT_TIME = 60
 DEFAULT_FREQ = 1
 
@@ -48,9 +49,9 @@ def main():
     args = parser.parse_args()
 
     if args.fix:
-        common.fix_prequisites()
+        sat.common.fix_prequisites()
 
-    common.check_prequisites(args.path)
+    sat.common.check_prequisites(args.path)
 
     path = args.path if args.path else DEFAULT_PATH
 
@@ -63,7 +64,7 @@ def main():
     frequency = args.frequency if args.frequency else DEFAULT_FREQ
     time      = args.time if args.time else DEFAULT_TIME
 
-    if label:
+    if args.record:
         record(args.record, time, frequency, args.display, path)
 
 

@@ -1,5 +1,5 @@
 import cv2
-import common
+import see_a_thing.common as common
 import time as time_module
 
 def camera_feed(time, frequency, display=True):
@@ -12,7 +12,7 @@ def camera_feed(time, frequency, display=True):
 
     capture = cv2.VideoCapture(0)
     try:
-        while True:
+        while time_module.time() <= record_until:
             ret, frame = capture.read()
             cv2.waitKey(1)
 
