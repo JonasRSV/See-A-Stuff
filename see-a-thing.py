@@ -62,7 +62,7 @@ def main():
         live(args.time, args.max_frequency, args.display)
 
     max_frequency = args.max_frequency if args.max_frequency else DEFAULT_FREQ
-    time      = args.time if args.time else DEFAULT_TIME
+    time          = args.time if args.time else DEFAULT_TIME
 
     if args.record:
         record(args.record, time, max_frequency, args.display, path)
