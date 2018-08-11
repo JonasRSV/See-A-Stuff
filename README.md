@@ -1,8 +1,8 @@
 # See-A-Stuff
 
-* [Prequisites][Prequisites]
-* [Try it out][Trying it out]
-* [Detection][Detection Implementation]
+![Prequisites][Prequisites]
+![Try it out][Trying it out]
+![Detection][Detection Implementation]
 
 This is a hobby project to explore the field of computer vision abit. The main challenge is differentiate between
 individuals in a room with a static background. Around this is a tiny CLI tool that wraps some functionality to easily
@@ -27,32 +27,30 @@ python3 see-a-thing -h
 
 A minimal usecase would be.
 
-1. Record the Background 
+#### Record the Background 
 ```bash
 python3 see-a-thing -r record --label background -f 10 -t 120
 ```
-2. Record X individuals
+#### Record X individuals
 ```bash
 python3 see-a-thing -r record --label NAME -f 10 -t 120
 ```
-You can easily record additional data for a individual, just use the same label
-and the CLI will append to the current data it has.
-3. Train the model
+> You can easily record additional data for a individual, just use the same label and the CLI will append to the current data it has.
+
+#### Train the model
 ```bash
 python3 see-a-thing -r train
 ```
-4. Start a monitor
+#### Start a monitor
 ```bash
 python3 see-a-thing -s commandline
 ```
-for a commandline gui
+> for a commandline gui
 
 ```bash
 python3 see-a-thing -s websocket
 ```
-
-to serve the results from port 5000. The websocket 
-might be nice for a GUI.
+> to serve the results from port 5000. The websocket might be nice for a GUI.
 
 ### Detection Implementation
 ... In progress
