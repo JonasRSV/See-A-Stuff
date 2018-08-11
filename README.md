@@ -1,10 +1,10 @@
 # See-A-Stuff
 
-*  [Prequisites](#Prequisites)
+*  [Prequisites](#prequisites)
 
-*  [Try it out](#Trying-it-out)
+*  [Try it out](#trying-it-out)
 
-*  [Detection](#Detection-Implementation)
+*  [Detection](#detection-implementation)
 
 This is a hobby project to explore the field of computer vision abit. The main challenge is differentiate between
 individuals in a room with a static background. Around this is a tiny CLI tool that wraps some functionality to easily
