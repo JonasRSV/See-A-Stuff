@@ -1,10 +1,12 @@
 # See-A-Stuff
 
-*  [Prequisites](#prequisites)
-*  [Detection](#detection-implementation)
-*  [Try it out](#trying-it-out)
+###  [Introduction](#introduction)
+###  [Prequisites](#prequisites)
+###  [Detection](#detection-implementation)
+###  [Try it out](#trying-it-out)
 
 
+## Introduction
 This is a hobby project to explore the field of computer vision abit. The main challenge is to differentiate between
 individuals in a room with a static background. 
 
