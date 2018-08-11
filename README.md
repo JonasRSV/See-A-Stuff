@@ -15,8 +15,7 @@ test and combine this with other tools such as a GUI.
   * camera compatible with opencv2 
   * python 3.x
 
-[Trying it out]:
-### Trying it out
+[Trying it out]: ### Trying it out
 
 To try it out install all the requirements in the requirements.txt file using
 ```bash
