@@ -11,7 +11,7 @@ GRAPH_OUTPUT       = None
 CATEGORIES         = None
 GLOBAL_STEP_TENSOR = None
 
-INIT_LEARNING_RATE = 0.1
+INIT_LEARNING_RATE = 0.0001
 LR_DECAY_STEPS     = 10000
 LR_DECAY_RATE      = 0.96
 LR_STAIRCASE       = True
@@ -54,13 +54,12 @@ def get_learn_and_summaries_tensors():
                                              LR_DECAY_RATE,
                                              staircase=LR_STAIRCASE)
 
-
     optimizer = tf.train.AdamOptimizer(learning_rate=lr)\
             .minimize(loss, 
                       global_step=global_step)
 
 
-    tf.summary.scalar("loss", tf.reduce_mean(loss))
+    tf.summary.scalar("loss", loss)
     tf.summary.scalar("learning rate", lr)
 
     return optimizer, tf.summary.merge_all()
@@ -77,10 +76,10 @@ def save_graph(categories):
     if os.path.isdir(MODEL_DIRECTORY):
         shutil.rmtree(MODEL_DIRECTORY)
 
-
     builder = tf.saved_model.builder.SavedModelBuilder(MODEL_DIRECTORY)
     builder.add_meta_graph_and_variables(tf.get_default_session(), ["see-a-thing-tag"])
     builder.save()
+
 
 def restore_graph():
     meta_graph = tf.saved_model.loader.load(tf.get_default_session(),
@@ -94,5 +93,4 @@ def restore_graph():
     categories          = graph.get_tensor_by_name("categories:0")
     input_tensor        = graph.get_tensor_by_name("input:0")
     
-
     return input_tensor, category_tensor, probabilites_tensor, categories

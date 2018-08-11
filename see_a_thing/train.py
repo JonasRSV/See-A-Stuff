@@ -44,8 +44,8 @@ def record(subject_name, camera, training_root):
 
     return True
 
-BATCH_SIZE = 32
-EPOCHS     = 10
+BATCH_SIZE = 3
+EPOCHS     = 1
 
 def fit(path):
 
@@ -62,9 +62,6 @@ def fit(path):
     inputs, labels =\
             graphs.create_graph_placeholders(subject_datas.shape,
                                              num_categories)
-
-    validation_feed_dict = {inputs: data_validation,
-                            labels: label_validation}
 
     training_feed_dicts =\
             common.preprocess_feed_dicts(data_train,
@@ -89,9 +86,6 @@ def fit(path):
         session.run(tf.global_variables_initializer())
 
         for epoch in range(EPOCHS):
-            epoch_summary = tf.Summary()
-            epoch_summary.value.add(tag="epoch", simple_value=float(epoch))
-
             for feed_dict in training_feed_dicts:
                 _, summaries, step = session.run((learn_ops, 
                                                   summaries_ops,
@@ -100,7 +94,12 @@ def fit(path):
 
                 summary_writer.add_summary(summaries, step)
 
-            summary_writer.add_summary(epoch_summary, epoch)
+        validate_training(inputs, 
+                          graphs.GRAPH_OUTPUT, 
+                          data_validation, 
+                          label_validation, 
+                          categories, 
+                          summary_writer)
 
         summary_writer.flush()
         summary_writer.close()
@@ -108,6 +107,13 @@ def fit(path):
         session.close()
 
 
-def validate_training(in_tensor, out_tensor, in_data, out_labels, summary_writer):
-    pass
+def validate_training(in_tensor, out_tensor, in_data, out_labels, categories, summary_writer):
+    session = tf.get_default_session()
+
+    predictions = np.argmax(session.run(out_tensor, feed_dict={in_tensor: in_data}), axis=1)
+
+    print("Validation Score: ", sum(predictions == out_labels) / len(out_labels))
+    print("Total Validation: ", len(out_labels))
+    for index, category in enumerate(categories):
+        print("{} Guesses {}".format(category, sum((np.ones_like(predictions) * index) == predictions)))
 

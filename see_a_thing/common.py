@@ -1,12 +1,15 @@
 import os
 import sys
 import numpy as np
+import cv2
 
 def preprocess_image(image):
     #####################
     # Preprocess images #
     #####################
-    return image
+    reduce_size = cv2.resize(image, (299, 299)) / 256
+
+    return reduce_size
 
 
 def preprocess_feed_dicts(a1, a2, a1t, a2t, batch):
