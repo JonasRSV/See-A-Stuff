@@ -10,10 +10,12 @@ This is a hobby project to explore the field of computer vision abit. The main c
 individuals in a room with a static background. Around this is a tiny CLI tool that wraps some functionality to easily
 test and combine this with other tools such as a GUI. 
 
+[Prequisites]
 ### Prequisites
   * camera compatible with opencv2 
   * python 3.x
 
+[Trying it out]
 ### Trying it out
 
 To try it out install all the requirements in the requirements.txt file using
@@ -54,5 +56,6 @@ python3 see-a-thing -s websocket
 ```
 > to serve the results from port 5000. The websocket might be nice for a GUI.
 
+[Detection Implementation]
 ### Detection Implementation
 ... In progress
