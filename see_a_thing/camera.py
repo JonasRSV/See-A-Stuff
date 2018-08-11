@@ -1,14 +1,19 @@
+import numpy as np
 import cv2
 import see_a_thing.common as common
+import see_a_thing.files as files
 import time as time_module
 
-def camera_feed(time, max_frequency, display=True):
+def camera_feed(settings):
     #################################
     # Time in seconds to record     #
     # Frequency in Hz to record in  #
     #################################
-    record_until   = time_module.time() + time
-    sleep_duration = 1 / max_frequency
+    record_until   = time_module.time() + settings["time"]
+    sleep_duration = 1 / settings["frequency"]
+
+    print("\n\nCamera Recording For {} Seconds With a Frequency Of {} Hz\n\n"
+            .format(settings["time"], settings["frequency"]))
 
     capture = cv2.VideoCapture(0)
     try:
@@ -16,8 +21,8 @@ def camera_feed(time, max_frequency, display=True):
             ret, frame = capture.read()
             cv2.waitKey(1)
 
-            if display:
-                cv2.imshow('frame', frame)
+            if settings["display"]:
+                cv2.imshow('Camera Feed', frame)
 
             yield frame
 
@@ -28,4 +33,15 @@ def camera_feed(time, max_frequency, display=True):
 
     capture.release()
     cv2.destroyAllWindows()
+
+
+def record(settings):
+    feed = camera_feed(settings)
+
+    images = []
+    for image in feed:
+        images.append(common.preprocess_image(image))
+
+    images = np.array(images)
+    files.append_data(settings, images)
 

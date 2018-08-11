@@ -1,26 +1,68 @@
+import numpy as np
 import argparse
 import see_a_thing as sat
 import sys
 
 
-DEFAULT_TIME = 60
-DEFAULT_FREQ = 1
+DEFAULT_TIME    = 20
+DEFAULT_FREQ    = 1
 
-########################
-# Don't touch this one #
-########################
-DEFAULT_PATH = "training"
+DEFAULT_TRAIN_PATH  = "training"
+DEFAULT_MODEL_PATH  = "model"
+
+DEFAULT_LABEL = "smith"
+
+FUNCTIONS = np.array([sat.camera.record, sat.train.fit, sat.live.monitor, sat.live.serve])
+
 
 def main():
-
     sat.common.print_logo()
+
+    args    = get_cli_args()
+    options = [args.record, args.train, args.commandline_gui, args.serve] 
+
+    settings = {"frequency": args.max_frequency if args.max_frequency else DEFAULT_FREQ,
+                "time": args.time if args.time else DEFAULT_TIME,
+                "display": args.display,
+                "label": args.label if args.label else DEFAULT_LABEL,
+                "training_path": args.training_path if args.training_path else DEFAULT_TRAIN_PATH,
+                "model_path": args.model_path if args.model_path else DEFAULT_MODEL_PATH,
+                "options": options,
+                "overwrite": args.overwrite
+                }
+
+    if args.fix:
+        sat.common.fix_prequisites(settings)
+
+    if args.clean:
+        sat.files.clean_files()
+
+    sat.common.check_prequisites(settings)
+
+    for function in FUNCTIONS[options]:
+        function(settings)
+
+
+    if args.data:
+        sat.files.load_data(settings)
+
+
+def get_cli_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("-r", "--record", 
-                        help="record labeled data with: --record XXX",
+                        help="Run the recorder (Use to --label flag to specify label of the data)",
+                        action="store_true")
+
+    parser.add_argument("--clean",
+                        help="Clean the model and training directory",
+                        action="store_true")
+
+    parser.add_argument("--label",
+                        help="Label for the recorded data",
                         type=str)
 
     parser.add_argument("-f", "--max_frequency",
-                        help="Frequency camera should run at in Hz",
+                        help="Max Frequency camera will run at in Hz",
                         type=float)
 
     parser.add_argument("-t", "--time",
@@ -31,20 +73,32 @@ def main():
                         help="Display what is being recorded",
                         action="store_true")
 
-    parser.add_argument("-l", "--live",
-                        help="Run the detector live",
+    parser.add_argument("-cg", "--commandline_gui",
+                        help="Run monitor with commandline gui",
+                        action="store_true")
+
+    parser.add_argument("-s", "--serve",
+                        help="Serve predictions through websocket",
                         action="store_true")
 
     parser.add_argument("--train",
                         help="Train the model",
                         action="store_true")
 
+    parser.add_argument("--overwrite",
+                        help="Will overwrite existing model when combined with train",
+                        action="store_true")
+
     parser.add_argument("--fix",
                         help="\'Fix all prequisites for me\'",
                         action="store_true")
 
-    parser.add_argument("-p", "--path", 
-                        help="Path to the training directory",
+    parser.add_argument("-tp", "--training_path", 
+                        help="(Optional) Path to the training directory",
+                        type=str)
+
+    parser.add_argument("-mp", "--model_path",
+                        help="(Optional) Path to the model directory",
                         type=str)
 
     parser.add_argument("--data",
@@ -53,59 +107,7 @@ def main():
 
     args = parser.parse_args()
 
-    if args.fix:
-        sat.common.fix_prequisites()
-
-    path = sat.common.check_prequisites(args.path)
-
-    if args.data:
-        sat.common.read_training_data(path)
-
-    if args.train:
-        train(path)
-
-    if args.live:
-        live(args.time, args.max_frequency, args.display)
-
-    max_frequency = args.max_frequency if args.max_frequency else DEFAULT_FREQ
-    time          = args.time if args.time else DEFAULT_TIME
-
-    if args.record:
-        record(args.record, time, max_frequency, args.display, path)
-
-
-def record(label, time, max_frequency, display, path):
-    #####################################
-    # Record the data used for training #
-    #####################################
-    camera_feed = sat.camera.camera_feed(time, max_frequency, display)
-    sat.train.record(label, camera_feed, path)
-    sys.exit(0)
-
-def live(time, max_frequency, display):
-    print("Live at freq {} for {}".format(max_frequency, time))
-
-    ###########################################
-    # Update frequency of 10 times per second #
-    ###########################################
-    if not max_frequency:
-        max_frequency = 10
-
-    ############
-    # One Hour #
-    ############
-    if not time:
-        time = 3600
-
-    camera_feed    = sat.camera.camera_feed(time, max_frequency, display)
-    predictor_feed = sat.live.predictor_feed(camera_feed)
-
-    sat.live.demo_display(predictor_feed)
-    sys.exit(0)
-
-def train(path):
-    sat.train.fit(path)
-    sys.exit(0)
+    return args
 
 
 if __name__ == "__main__":
