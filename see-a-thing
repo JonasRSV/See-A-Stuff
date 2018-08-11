@@ -1,3 +1,4 @@
+#!/usr/local/bin/python3
 import numpy as np
 import argparse
 import see_a_thing as sat
@@ -19,7 +20,7 @@ def main():
     sat.common.print_logo()
 
     args    = get_cli_args()
-    options = [args.record, args.train, args.commandline_gui, args.serve] 
+    options = [args.record, args.train, args.commandline, args.websocket] 
 
     settings = {"frequency": args.max_frequency if args.max_frequency else DEFAULT_FREQ,
                 "time": args.time if args.time else DEFAULT_TIME,
@@ -49,9 +50,11 @@ def main():
 
 def get_cli_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument("-r", "--record", 
-                        help="Run the recorder (Use to --label flag to specify label of the data)",
-                        action="store_true")
+
+    parser.add_argument("--run", "-r", choices=["record", "train"],
+                        help="The recorder records the data used for training\nThe train creates the model that get served.")
+
+    parser.add_argument("--serve", "-s", choices=["commandline", "websocket"])
 
     parser.add_argument("--clean",
                         help="Clean the model and training directory",
@@ -73,31 +76,19 @@ def get_cli_args():
                         help="Display what is being recorded",
                         action="store_true")
 
-    parser.add_argument("-cg", "--commandline_gui",
-                        help="Run monitor with commandline gui",
-                        action="store_true")
-
-    parser.add_argument("-s", "--serve",
-                        help="Serve predictions through websocket",
-                        action="store_true")
-
-    parser.add_argument("--train",
-                        help="Train the model",
-                        action="store_true")
-
     parser.add_argument("--overwrite",
                         help="Will overwrite existing model when combined with train",
                         action="store_true")
 
     parser.add_argument("--fix",
-                        help="\'Fix all prequisites for me\'",
+                        help="\'Fix all prequisites for me\' Use with caution, will remove training data.",
                         action="store_true")
 
-    parser.add_argument("-tp", "--training_path", 
+    parser.add_argument("--training_path", 
                         help="(Optional) Path to the training directory",
                         type=str)
 
-    parser.add_argument("-mp", "--model_path",
+    parser.add_argument("--model_path",
                         help="(Optional) Path to the model directory",
                         type=str)
 
@@ -106,6 +97,11 @@ def get_cli_args():
                         action="store_true")
 
     args = parser.parse_args()
+
+    args.commandline = True if args.serve == "commandline" else False
+    args.websocket   = True if args.serve == "websocket" else False
+    args.record      = True if args.run   == "record" else False
+    args.train       = True if args.run   == "train" else False
 
     return args
 

@@ -33,7 +33,7 @@ def predictions(camera_feed, graph):
             yield c, categories, p
 
     except StopIteration:
-        sys.stderr.write("\n Camera feed done, qutting predictor feed.")
+        pass
 
 
 def monitor(settings):
@@ -55,8 +55,8 @@ def monitor(settings):
                 for i, (cat, prob) in enumerate(zip(cs, ps)):
                     stdscr.addstr(i + 1, 0, "{} {}%".format(cat, round(prob * 100, 2)))
                 stdscr.refresh()
-        except StopIteration:
-            sys.stderr.write("\n Predictor feed done, qutting Demo feed.")
+        except (StopIteration, KeyboardInterrupt):
+            pass
 
         curses.echo()
         curses.nocbreak()
@@ -66,38 +66,52 @@ def monitor(settings):
 def serve(settings):
     camera_feed = camera.camera_feed(settings)
 
-    with tf.Session() as session:
-        graph = graphs.GraphBuilder.restore_graph(settings["model_path"])
-        predictions_feed = predictions(camera_feed, graph)
+    stdscr      = curses.initscr()
 
-        message = {"category": None,
-                   "categories": [],
-                   "probabilites": []}
+    curses.noecho()
+    curses.cbreak()
 
-        @asyncio.coroutine
-        def pred_server(websocket, path):
-            while True:
-                print("Message", message)
-                yield from websocket.send(json.dumps(message))
-                yield from asyncio.sleep(1)
+    try:
+        with tf.Session() as session:
+            graph = graphs.GraphBuilder.restore_graph(settings["model_path"])
+            predictions_feed = predictions(camera_feed, graph)
 
-        @asyncio.coroutine
-        def feed_update():
-            while True:
-                c, cs, ps = next(predictions_feed)
-                message["category"]     = str(c)
-                message["categories"]   = list(cs)
-                message["probabilites"] = list(map(lambda f: float(f), ps))
+            message = {"category": None,
+                       "categories": [],
+                       "probabilites": []}
 
-                yield from asyncio.sleep(0.01)
+            @asyncio.coroutine
+            def pred_server(websocket, path):
+                while True:
+                    stdscr.addstr(0, 0, "Serving clients at 0.0.0.0:5000")
+                    stdscr.addstr(1, 0, "Served Client at {}".format(websocket.origin))
+                    stdscr.addstr(2, 0, "{} is infront of me".format(message["category"]))
+                    stdscr.refresh()
+                    yield from websocket.send(json.dumps(message))
+                    yield from asyncio.sleep(1)
 
-        server = websockets.serve(pred_server, "0.0.0.0", 5000)
+            @asyncio.coroutine
+            def feed_update():
+                while True:
+                    c, cs, ps = next(predictions_feed)
+                    message["category"]     = str(c)
+                    message["categories"]   = list(cs)
+                    message["probabilites"] = list(map(lambda f: float(f), ps))
+                    yield from asyncio.sleep(0.01)
 
-        asyncio.get_event_loop().run_until_complete(server)
-        asyncio.async(feed_update())
+            server = websockets.serve(pred_server, "0.0.0.0", 5000)
 
-        print("Serving at 0.0.0.0:5000")
-        asyncio.get_event_loop().run_forever()
+            asyncio.get_event_loop().run_until_complete(server)
+            asyncio.async(feed_update())
+            asyncio.get_event_loop().run_forever()
+
+    except (KeyboardInterrupt, Exception):
+        pass
+
+    curses.echo()
+    curses.nocbreak()
+    curses.endwin()
+
 
 
 

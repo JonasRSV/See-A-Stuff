@@ -22,8 +22,10 @@ def check_prequisites(settings):
 
 
 # TODO: Add more fixes if need be
-def fix_prequisites():
+def fix_prequisites(settings):
     files.fix_file_prequisites(settings)
+
+    print("\nPrequisites Fixed! :)")
 
 
 

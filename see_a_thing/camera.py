@@ -12,7 +12,7 @@ def camera_feed(settings):
     record_until   = time_module.time() + settings["time"]
     sleep_duration = 1 / settings["frequency"]
 
-    print("\n\nCamera Recording For {} Seconds With a Frequency Of {} Hz\n\n"
+    print("\nCamera Recording For {} Seconds With a Frequency Of {} Hz"
             .format(settings["time"], settings["frequency"]))
 
     capture = cv2.VideoCapture(0)
