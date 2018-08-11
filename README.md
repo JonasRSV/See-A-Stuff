@@ -1,18 +1,23 @@
 # See-A-Stuff
 
 *  [Prequisites](#prequisites)
-
+*  [Detection](#detection-implementation)
 *  [Try it out](#trying-it-out)
 
-*  [Detection](#detection-implementation)
 
-This is a hobby project to explore the field of computer vision abit. The main challenge is differentiate between
-individuals in a room with a static background. Around this is a tiny CLI tool that wraps some functionality to easily
-test and combine this with other tools such as a GUI. 
+This is a hobby project to explore the field of computer vision abit. The main challenge is to differentiate between
+individuals in a room with a static background. 
+
+<br/>
+
+A tiny tool is built around this to make it easier to try it out.
 
 ### Prequisites
   * camera compatible with opencv2 
   * python 3.x
+
+### Detection Implementation
+... In progress
 
 ### Trying it out
 
@@ -54,5 +59,3 @@ python3 see-a-thing -s websocket
 ```
 > to serve the results from port 5000. The websocket might be nice for a GUI.
 
-### Detection Implementation
-... In progress
