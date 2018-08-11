@@ -13,6 +13,7 @@ DEFAULT_PATH = "training"
 
 def main():
 
+    sat.common.print_logo()
     parser = argparse.ArgumentParser()
     parser.add_argument("-r", "--record", 
                         help="record labeled data with: --record XXX",
@@ -46,14 +47,19 @@ def main():
                         help="Path to the training directory",
                         type=str)
 
+    parser.add_argument("--data",
+                        help="Print Available Data",
+                        action="store_true")
+
     args = parser.parse_args()
 
     if args.fix:
         sat.common.fix_prequisites()
 
-    sat.common.check_prequisites(args.path)
+    path = sat.common.check_prequisites(args.path)
 
-    path = args.path if args.path else DEFAULT_PATH
+    if args.data:
+        sat.common.read_training_data(path)
 
     if args.train:
         train(path)

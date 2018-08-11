@@ -48,87 +48,66 @@ BATCH_SIZE = 32
 EPOCHS     = 10
 
 def fit(path):
-    subject_files = os.listdir(path)
 
-    subject_labels = []
-    subject_datas  = []
-    for subject_file in subject_files:
-        subject_data = None
-        subject_path = os.path.join(path, subject_file)
-        try:
-            with open(subject_data, "rb") as subject_file_handle:
-                subject_data = np.load(subject_file_handle)
-        except OSError:
-            sys.stderr.write("\n" + subject_path
-                    + " appears to be corrupt, ignoring it.")
-
-        if subject_data:
-            images = subject_data.shape[0]
-
-            subject_datas.append(subject_data)
-            subject_labels.extend([subject_file] * images)
-
-            sys.stdout.write("\nRecovered data for {}, {} images".format(subject_file, images))
+    subject_datas, subject_labels, num_categories, categories =\
+            common.read_training_data(path)
 
     data_train, data_validation, label_train, label_validation =\
-            skm.train_test_split(subject_data, 
+            skm.train_test_split(subject_datas, 
                                  subject_labels,
                                  train_size=0.8,
                                  shuffle=True)
 
-    ######################
-    # Preprocess batches #
-    ######################
-    valdation_data_batch   = np.concatenate(data_validation)
-    validation_label_batch = np.concatenate(label_validation)
 
     inputs, labels =\
-            graphs.create_graph_placeholders(valdation_data_batch.shape,
-                                             validation_label_batch.shape)
+            graphs.create_graph_placeholders(subject_datas.shape,
+                                             num_categories)
 
-    validation_feed_dict = {inputs: valdation_data_batch,
-                            labels: validation_label_batch}
+    validation_feed_dict = {inputs: data_validation,
+                            labels: label_validation}
 
-    training_feed_dicts = []
-
-    bi = 0
-    while bi < len(data_train):
-        data_batch  = data_train[bi: bi + BATCH_SIZE]
-        label_batch = label_train[bi: bi + BATCH_SIZE]
-        feed_dict   = {inputs: data_batch,
-                       labels: label_batch}
-
-        training_feed_dicts.append(feed_dict)
-
-        bi += BATCH_SIZE
+    training_feed_dicts =\
+            common.preprocess_feed_dicts(data_train,
+                                         label_train,
+                                         inputs,
+                                         labels,
+                                         BATCH_SIZE)
 
     #############################################
     # Prepair session, summary writer and graph #
     #############################################
 
-    session = tf.Session()
-    graph   = tf.get_default_graph()
-    learn_ops, summaries_ops = graphs.get_learn_and_summaries_tensors()
+    with tf.Session() as session:
+        graph   = tf.get_default_graph()
+        learn_ops, summaries_ops = graphs.get_learn_and_summaries_tensors()
 
-    summary_writer = tf.summary.FileWriter("./summaries", 
-                                           graph=graph, 
-                                           session=session)
+        global_step = tf.train.get_global_step()
 
-    for epoch in range(EPOCHS):
-        epoch_summary = tf.Summary()
-        epoch_summary.value.add(tag="epoch", simple_value=float(epoch))
+        summary_writer = tf.summary.FileWriter("./summaries", 
+                                               session=session)
 
-        for feed_dict in training_feed_dicts:
-            _, summaries, step = session.run((learn_ops, 
-                                              summaries_ops,
-                                              tf.train.get_gloget_global_step(graph)),
-                                             feed_dict=feed_dict)
+        session.run(tf.global_variables_initializer())
 
-            for summary in summaries:
-                summary_writer.add_summary(summary, step)
+        for epoch in range(EPOCHS):
+            epoch_summary = tf.Summary()
+            epoch_summary.value.add(tag="epoch", simple_value=float(epoch))
 
-        summary_writer.add_summary(epoch_summary, epoch)
+            for feed_dict in training_feed_dicts:
+                _, summaries, step = session.run((learn_ops, 
+                                                  summaries_ops,
+                                                  global_step),
+                                                 feed_dict=feed_dict)
 
-    graphs.save_graph()
-    session.close()
+                summary_writer.add_summary(summaries, step)
+
+            summary_writer.add_summary(epoch_summary, epoch)
+
+        summary_writer.flush()
+        summary_writer.close()
+        graphs.save_graph(categories)
+        session.close()
+
+
+def validate_training(in_tensor, out_tensor, in_data, out_labels, summary_writer):
+    pass
 

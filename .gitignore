@@ -2,3 +2,4 @@ training/
 .venv
 scp_model.sh
 s00perSecret.pass
+summaries/
