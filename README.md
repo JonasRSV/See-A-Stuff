@@ -1,10 +1,10 @@
 # See-A-Stuff
 
-[Prequisites][Prequisites]
+*  [Prequisites][Prequisites]
 
-[Try it out][Trying it out]
+*  [Try it out][Trying it out]
 
-[Detection][Detection Implementation]
+*  [Detection][Detection Implementation]
 
 This is a hobby project to explore the field of computer vision abit. The main challenge is differentiate between
 individuals in a room with a static background. Around this is a tiny CLI tool that wraps some functionality to easily
@@ -15,7 +15,8 @@ test and combine this with other tools such as a GUI.
   * camera compatible with opencv2 
   * python 3.x
 
-[Trying it out]: ### Trying it out
+[Trying it out]: 
+### Trying it out
 
 To try it out install all the requirements in the requirements.txt file using
 ```bash
