@@ -2,26 +2,48 @@
 
 ###  [Introduction](#introduction)
 ###  [Prequisites](#prequisites)
+###  [Resources](#resources)
 ###  [Detection](#detection-implementation)
 ###  [Try it out](#trying-it-out)
 
 
 ## Introduction
-This is a hobby project to explore the field of computer vision abit. The main challenge is to differentiate between
-individuals in a room with a static background. 
-
+This is a hobby project to explore the field of computer vision abit. The main challenge is to classify differences
+in a scene. Example, different people being present in a room with a static background.
 <br/>
+#### Constraints
+* No pre-trained model can be used.
+* All training has to be done on data sampled by the camera.
+* The objective is to be able to do classification on individual images not sequences, eliminating time-dependant models.
 
 A tiny tool is built around this to make it easier to try it out.
 
-### Prequisites
+## Prequisites
   * camera compatible with opencv2 
   * python 3.x
 
-### Detection Implementation
-... In progress
+#### Resources
+  * https://www.deeplearningbook.org/contents/convnets.html (What Convolutions is)
+  * https://arxiv.org/pdf/1803.08834.pdf (Good Summary of DL in computer vision)
+  * https://arxiv.org/pdf/1409.4842.pdf (GoogLeNet)
+  * https://arxiv.org/pdf/1711.08132.pdf (LSNNs)
 
-### Trying it out
+## Detection Implementation
+TODO: 
+1. conv with initial kernel as gaussian smoothing
+2. conv with initial kernel as edge detector (eg sobel)
+3. Connect to Inception module
+4. Connect to LSNNs
+5. Connect to Categories
+
+#### Motivation: Seemes like something worth testing.
+
+<br/>
+<br/>
+<br/>
+<br/>
+
+## Trying it out
 
 To try it out install all the requirements in the requirements.txt file using
 ```bash

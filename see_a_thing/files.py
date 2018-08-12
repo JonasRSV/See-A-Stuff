@@ -125,6 +125,7 @@ def recreate_training_directory(settings):
 def clean_files(settings):
     remove_model_directory(settings)
     recreate_training_directory(settings)
+    print("\nFiles Cleaned! :)")
 
 
 # TODO: Make it more specialized?

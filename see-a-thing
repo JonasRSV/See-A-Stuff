@@ -36,7 +36,7 @@ def main():
         sat.common.fix_prequisites(settings)
 
     if args.clean:
-        sat.files.clean_files()
+        sat.files.clean_files(settings)
 
     sat.common.check_prequisites(settings)
 
