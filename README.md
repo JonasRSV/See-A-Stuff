@@ -32,7 +32,7 @@ A tiny tool is built around this to make it easier to try it out.
 
 ## Detection Implementation
 - [x] [Inception Module](#minizeption)
-- [x] Durr
+- [X] Durr
 - [ ] LSNN Module
 
 ### Minizeption
