@@ -31,8 +31,8 @@ A tiny tool is built around this to make it easier to try it out.
   * https://arxiv.org/pdf/1711.08132.pdf (LSNNs) 
 
 ## Detection Implementation
-<input type="checkbox" name="Inception" value="" checked> [Inception Module](#minizeption)
-<input type="checkbox" name="LSNN" value="" checked> LSNN Module
+<input type="checkbox" name="Inception" value="Stuff" checked> [Inception Module](#minizeption)
+<input type="checkbox" name="LSNN" value="Stuff" checked> LSNN Module
 
 ### Minizeption
 ![Imgur](https://i.imgur.com/vyyhEyj.png)
