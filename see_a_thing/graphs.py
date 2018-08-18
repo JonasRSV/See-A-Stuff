@@ -1,7 +1,26 @@
 import tensorflow as tf
 import os
 import shutil
+import see_a_thing.modules.inception as inception
 
+
+def minizeption_network(x):
+    x = tf.layers.conv2d(x, 64, 7, 2)
+    x = tf.layers.max_pooling2d(x, 3, 2)
+
+    x = inception.Inception(64, scope="inception_1")(x)
+    x = tf.layers.max_pooling2d(x, 3, 2)
+    x = inception.Inception(64, scope="inception_2")(x)
+    x = tf.layers.max_pooling2d(x, 3, 2)
+    x = inception.Inception(64, scope="inception_3")(x)
+    x = tf.layers.max_pooling2d(x, 3, 2)
+
+    x = tf.nn.pool(x, [8, 8], pooling_type="AVG", padding="VALID")
+    features = tf.layers.flatten(x)
+    return features
+
+
+    
 
 class GraphBuilder(object):
     INPUTS_NAME       = "inputs"
@@ -34,30 +53,27 @@ class GraphBuilder(object):
         self.categories     = tf.constant(categories, name=GraphBuilder.CATEGORIES_NAME)
 
     def build_classifier(self):
-
-        flat = tf.layers.flatten(self.inputs)
-        out  = tf.layers.dense(flat, self.num_categories, 
-                              activation=tf.nn.softmax)
-
-        out = tf.identity(out, name=GraphBuilder.PROBABILITES_NAME)
+        features = minizeption_network(self.inputs)
+        logits   = tf.layers.dense(features, self.num_categories, activation=None)
+        odds     = tf.nn.softmax(logits)
 
         #####################
         # For the Live View #
         #####################
         category_op = tf.map_fn(lambda prob: self.categories[tf.argmax(prob)],
-                                out,
+                                odds,
                                 dtype=tf.string)
 
-        category    = tf.identity(category_op, name=GraphBuilder.CATEGORY_NAME)
+        tf.identity(category_op, name=GraphBuilder.CATEGORY_NAME)
+        tf.identity(odds, name=GraphBuilder.PROBABILITES_NAME)
 
-        return out
+        return logits, odds
 
     def get_learn_and_summaries_tensors(self):
 
-        self.outputs = self.build_classifier()
-
-        loss = tf.losses.softmax_cross_entropy(self.labels,
-                                               self.outputs)
+        logits, self.odds = self.build_classifier()
+        loss = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits_v2(labels=self.labels,
+                                                          logits=logits))
 
         global_step = tf.train.create_global_step()
         lr          = tf.train.exponential_decay(GraphBuilder.INIT_LEARNING_RATE,

@@ -5,6 +5,7 @@
 ###  [Prequisites](#prequisites)
 ###  [Resources](#resources)
 ###  [Detection](#detection-implementation)
+  *  [Minizeption](#minizeption)
 ###  [Try it out](#trying-it-out)
 
 
@@ -27,15 +28,15 @@ A tiny tool is built around this to make it easier to try it out.
   * https://www.deeplearningbook.org/contents/convnets.html (What Convolutions is)
   * https://arxiv.org/pdf/1803.08834.pdf (Good Summary of DL in computer vision)
   * https://arxiv.org/pdf/1409.4842.pdf (GoogLeNet)
-  * https://arxiv.org/pdf/1711.08132.pdf (LSNNs)
+  * https://arxiv.org/pdf/1711.08132.pdf (LSNNs) 
 
 ## Detection Implementation
-TODO: 
-1. conv with initial kernel as gaussian smoothing
-2. conv with initial kernel as edge detector (eg sobel)
-3. Connect to Inception module
-4. Connect to LSNNs
-5. Connect to Categories
+<input type="checkbox" name="Inception" value="" checked> [Inception Module](#minizeption)
+<input type="checkbox" name="LSNN" value="" checked> LSNN Module
+
+### Minizeption
+![Imgur](https://i.imgur.com/vyyhEyj.png)
+
 
 #### Motivation: Seemes like something worth testing.
 

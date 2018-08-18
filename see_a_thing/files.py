@@ -17,7 +17,7 @@ def append_data(settings, images):
 
 
     if previous_data is not None:
-        images = np.concatenate([images, subject_data])
+        images = np.concatenate([images, previous_data])
 
     #################
     # Write to file #

@@ -44,7 +44,8 @@ def fit(settings):
 
         global_step = tf.train.get_global_step()
         summary_writer = tf.summary.FileWriter("./summaries", 
-                                               session=session)
+                                               session=session,
+                                               graph=session.graph)
 
         session.run(tf.global_variables_initializer())
 
@@ -57,8 +58,9 @@ def fit(settings):
 
                 summary_writer.add_summary(summaries, step)
 
+
         validate_training(inputs, 
-                          graph.outputs, 
+                          graph.odds, 
                           data_validation, 
                           label_validation, 
                           categories, 
