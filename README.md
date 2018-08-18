@@ -27,7 +27,7 @@ A tiny tool is built around this to make it easier to try it out.
 #### Resources
   * https://www.deeplearningbook.org/contents/convnets.html (What Convolutions is)
   * https://arxiv.org/pdf/1803.08834.pdf (Good Summary of DL in computer vision)
-  * https://arxiv.org/pdf/1409.4842.pdf (GoogLeNet)
+  * https://arxiv.org/pdf/1409.4842.pdf (GoogLeNet) (Inception Modules)
   * https://arxiv.org/pdf/1711.08132.pdf (LSNNs) 
 
 ## Detection Implementation
