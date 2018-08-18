@@ -72,8 +72,10 @@ class GraphBuilder(object):
     def get_learn_and_summaries_tensors(self):
 
         logits, self.odds = self.build_classifier()
-        loss = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits_v2(labels=self.labels,
-                                                          logits=logits))
+        loss = tf.reduce_mean(
+                tf.nn.softmax_cross_entropy_with_logits_v2(
+                    labels=self.labels,
+                    logits=logits))
 
         global_step = tf.train.create_global_step()
         lr          = tf.train.exponential_decay(GraphBuilder.INIT_LEARNING_RATE,
