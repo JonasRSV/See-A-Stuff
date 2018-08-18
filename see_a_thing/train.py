@@ -74,6 +74,7 @@ def fit(settings):
         session.close()
 
 
+# TODO: Add validation to tensorboard summaries instead
 def validate_training(in_tensor, out_tensor, in_data, out_labels, categories, summary_writer):
     session = tf.get_default_session()
 
