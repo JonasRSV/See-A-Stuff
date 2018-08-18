@@ -31,8 +31,7 @@ A tiny tool is built around this to make it easier to try it out.
   * https://arxiv.org/pdf/1711.08132.pdf (LSNNs) 
 
 ## Detection Implementation
-- [x] [Inception Module](#minizeption)
-- [x] Hurr
+- [x] [Inception Module](#minizeption)
 - [ ] LSNN Module
 
 ### Minizeption
