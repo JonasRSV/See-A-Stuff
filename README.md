@@ -2,7 +2,7 @@
 ![Imgur](https://i.imgur.com/czOS770.png)
 
 ###  [Introduction](#introduction-1)
-###  [Prequisites](#prequisites-1)
+###  [Prerequisites](#prerequisites-1)
 ###  [Resources](#resources-1)
 ###  [Detection](#detection-implementation)
   *  [Minizeption](#minizeption)
@@ -20,7 +20,7 @@ in a scene. Example, different people being present in a room with a static back
 
 A tiny tool is built around this to make it easier to try it out.
 
-## Prequisites
+## Prerequisites
   * camera compatible with opencv2 
   * python 3.x
 
