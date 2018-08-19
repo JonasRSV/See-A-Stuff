@@ -6,7 +6,7 @@
 ###  [Resources](#resources)
 ###  [Detection](#detection-implementation)
   *  [Minizeption](#minizeption)
-###  [Try it out](#trying-it-out)
+###  [Example](#example)
 
 
 ## Introduction
@@ -44,43 +44,84 @@ Structure of the minizeption network
 <br/>
 <br/>
 
-## Trying it out
+## Example
 
-To try it out install all the requirements in the requirements.txt file using
-```bash
-pip3 install -r requirements.txt
-```
-
-Run the main file to see all available option
+Clone repo and install dependencies
 
 ```bash
-python3 see-a-thing -h
+
+> git clone https://github.com/JonasRSV/See-A-Stuff.git
+> cd See-A-Stuff
+> pip3 install -r requirements.txt
+> python3 see-a-thing -h
+
+                                                                                                                                
+[92m         _______. _______  _______           ___           .___________. __    __   __  .__   __.   _______     __       ___      [0m
+[92m        /       ||   ____||   ____|         /   \          |           ||  |  |  | |  | |  \ |  |  /  _____|   /_ |     / _ \   [0m
+[92m       |   (----`|  |__   |  |__    ______ /  ^  \   ______`---|  |----`|  |__|  | |  | |   \|  | |  |  __      | |    | | | |  [0m
+[92m        \   \    |   __|  |   __|  |______/  /_\  \ |______|   |  |     |   __   | |  | |  . `  | |  | |_ |     | |    | | | |  [0m
+[92m    .----)   |   |  |____ |  |____       /  _____  \           |  |     |  |  |  | |  | |  |\   | |  |__| |     | |  __| |_| |  [0m
+[92m    |_______/    |_______||_______|     /__/     \__\          |__|     |__|  |__| |__| |__| \__|  \______|     |_| (__)\___/   [0m
+                                                                                                                                
+usage: see-a-thing [-h] [--run {record,train}]
+                   [--serve {commandline,websocket}] [--clean] [--label LABEL]
+                   [-f MAX_FREQUENCY] [-t TIME] [-d] [--overwrite] [--fix]
+                   [--training_path TRAINING_PATH] [--model_path MODEL_PATH]
+                   [--data]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --run {record,train}, -r {record,train}
+                        The recorder records the data used for training The
+                        train creates the model that get served.
+  --serve {commandline,websocket}, -s {commandline,websocket}
+  --clean               Clean the model and training directory
+  --label LABEL         Label for the recorded data
+  -f MAX_FREQUENCY, --max_frequency MAX_FREQUENCY
+                        Max Frequency camera will run at in Hz
+  -t TIME, --time TIME  Time the camera should run for (In seconds)
+  -d, --display         Display what is being recorded
+  --overwrite           Will overwrite existing model when combined with train
+  --fix                 'Fix all prequisites for me' Use with caution, will
+                        remove training data.
+  --training_path TRAINING_PATH
+                        (Optional) Path to the training directory
+  --model_path MODEL_PATH
+                        (Optional) Path to the model directory
+  --data                Print Available Data
+
+
 ```
 
-A minimal usecase would be.
+#### Record some things
 
-#### Record the Background 
 ```bash
-python3 see-a-thing -r record --label background -f 10 -t 120
+
+> python3 see-a-thing -r record --label thing1 -f 10 -t 120
+> python3 see-a-thing -r record --label thing2 -f 10 -t 120
+> python3 see-a-thing -r record --label thing3 -f 10 -t 120
+
+Add more data for thing1 if you want
+
+> python3 see-a-thing -r record --label thing1 -f 10 -t 120
+
 ```
-#### Record X individuals
-```bash
-python3 see-a-thing -r record --label NAME -f 10 -t 120
-```
-> You can easily record additional data for a individual, just use the same label and the CLI will append to the current data it has.
 
 #### Train the model
-```bash
-python3 see-a-thing -r train
-```
-#### Start a monitor
-```bash
-python3 see-a-thing -s commandline
-```
-> for a commandline gui
 
 ```bash
-python3 see-a-thing -s websocket
+
+> python3 see-a-thing -r train
+
 ```
-> to serve the results from port 5000. The websocket might be nice for a GUI.
+
+#### Serve the model
+
+```bash
+
+> python3 see-a-thing -s commandline (For commandline GUI)
+> python3 see-a-thing -s websocket (For starting a socket serving predictions at port 5000)
+
+```
+
 
