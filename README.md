@@ -6,7 +6,7 @@
 ###  [Resources](#resources)
 ###  [Detection](#detection-implementation)
   *  [Minizeption](#minizeption)
-###  [Usage Example](#usage-example)
+###  [Usage](#usage)
 
 
 ## Introduction
@@ -44,7 +44,7 @@ Structure of the minizeption network
 <br/>
 <br/>
 
-## Usage Example
+## Usage
 
 Clone repo and install dependencies
 
