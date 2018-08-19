@@ -46,7 +46,7 @@ Structure of the minizeption network
 
 ## Usage
 
-Clone repo and install dependencies
+> Clone repo and install dependencies
 
 ```bash
 
@@ -93,7 +93,7 @@ optional arguments:
 
 ```
 
-#### Record some things
+> Record some things
 
 ```bash
 
@@ -107,7 +107,7 @@ Add more data for thing1 if you want
 
 ```
 
-#### Train the model
+> Train the model
 
 ```bash
 
@@ -115,7 +115,7 @@ Add more data for thing1 if you want
 
 ```
 
-#### Serve the model
+> Serve the model
 
 ```bash
 
