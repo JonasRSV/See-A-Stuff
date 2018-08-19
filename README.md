@@ -1,9 +1,9 @@
 <!--<a href="https://giphy.com/gifs/U7MUyyxzyaKoDVdZ9V"> <img  src="https://media.giphy.com/media/U7MUyyxzyaKoDVdZ9V/giphy.gif" title="Overly Ambitious Title"/></a>-->
 ![Imgur](https://i.imgur.com/czOS770.png)
 
-###  [Introduction](#introduction)
-###  [Prequisites](#prequisites)
-###  [Resources](#resources)
+###  [Introduction](#introduction-1)
+###  [Prequisites](#prequisites-1)
+###  [Resources](#resources-1)
 ###  [Detection](#detection-implementation)
   *  [Minizeption](#minizeption)
 ###  [Usage](#usage-1)
@@ -29,6 +29,10 @@ A tiny tool is built around this to make it easier to try it out.
   * https://arxiv.org/pdf/1803.08834.pdf (Good Summary of DL in computer vision)
   * https://arxiv.org/pdf/1409.4842.pdf (GoogLeNet) (Inception Modules)
   * https://arxiv.org/pdf/1711.08132.pdf (LSNNs) 
+  * https://arxiv.org/pdf/1502.03167.pdf (Batch Norm, Faster Training)
+  * https://arxiv.org/pdf/1502.01852.pdf (Proper Initialization, Faster Training)
+  * https://arxiv.org/pdf/1706.05350.pdf (L2 + BatchNorm = :( )
+  * https://arxiv.org/pdf/1612.01490.pdf (Regularization With Gaussian Noise, Seems Cool)
 
 ## Detection Implementation
 - [x] [Inception Module](#minizeption)
