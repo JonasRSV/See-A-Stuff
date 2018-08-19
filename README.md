@@ -6,7 +6,7 @@
 ###  [Resources](#resources)
 ###  [Detection](#detection-implementation)
   *  [Minizeption](#minizeption)
-###  [Usage](#usage)
+###  [Usage](#usage-1)
 
 
 ## Introduction
