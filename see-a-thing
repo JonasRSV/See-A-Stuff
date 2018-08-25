@@ -43,7 +43,6 @@ def main():
     for function in FUNCTIONS[options]:
         function(settings)
 
-
     if args.data:
         sat.files.load_data(settings)
 
