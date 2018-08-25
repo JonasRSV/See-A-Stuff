@@ -1,15 +1,15 @@
 import sys
+import os
 import numpy as np
 import time as time_module
-import see_a_thing.files as files
+import see_a_thing.utils.files as files
 import see_a_thing.graphs as graphs
-import os
-import sklearn.model_selection as skm
 import tensorflow as tf
+import pandas as pd
 
 
-BATCH_SIZE = 16
-EPOCHS     = 5
+train_settings = {"batch_size": 16,
+                  "epochs": 5}
 
 def fit(settings):
 
@@ -17,23 +17,11 @@ def fit(settings):
         files.remove_model_directory(settings)
 
     datas, labels, categories = files.load_data(settings)
-
-    data_train, data_validation, label_train, label_validation =\
-            skm.train_test_split(datas, 
-                                 labels,
-                                 train_size=0.8,
-                                 shuffle=True)
+    graph, inputs_t, labels_t = graphs.GraphBuilder.of(datas.shape,
+                                                       categories)
 
 
-    graph, inputs, labels = graphs.GraphBuilder.of(datas.shape,
-                                                   categories)
-
-    training_feed_dicts =\
-            preprocess_feed_dicts(data_train,
-                                  label_train,
-                                  inputs,
-                                  labels,
-                                  BATCH_SIZE)
+    val_feed, train_gen_feed = get_val_and_train_feed(datas, labels, inputs_t, labels_t)
 
     #############################################
     # Prepair session, summary writer and graph #
@@ -49,12 +37,13 @@ def fit(settings):
 
         session.run(tf.global_variables_initializer())
 
-        for epoch in range(EPOCHS):
-            for feed_dict in training_feed_dicts:
+        for ep in range(train_settings["epochs"]):
+            train_dicts = next(train_feed_gen)
+            for train_dict in train_dicts:
                 _, summaries, step = session.run((learn_ops, 
                                                   summaries_ops,
                                                   global_step),
-                                                 feed_dict=feed_dict)
+                                                 feed_dict=train_dict)
 
                 summary_writer.add_summary(summaries, step)
 
@@ -74,34 +63,32 @@ def fit(settings):
         session.close()
 
 
-# TODO: Add validation to tensorboard summaries instead
-def validate_training(in_tensor, out_tensor, in_data, out_labels, categories, summary_writer):
-    session = tf.get_default_session()
-
-    predictions = np.argmax(session.run(out_tensor, feed_dict={in_tensor: in_data}), axis=1)
-
-    print("Validation Score: ", sum(predictions == out_labels) / len(out_labels))
-    print("Total Validation: ", len(out_labels))
-    for index, category in enumerate(categories):
-        print("{} Guesses {}".format(category, sum((np.ones_like(predictions) * index) == predictions)))
+def validate(inputs, val_dict, graph, summary_writer)
+    print("Todo: Validation")
 
 
-def preprocess_feed_dicts(a1, a2, a1t, a2t, batch):
-    assert len(a1) == len(a2)
+def get_val_and_train_feed(datas, labels, inputs_t, labels_t):
+    df = pd.DataFrame(data={"datas": datas, "labels": labels})
 
-    feed_dicts = []
-    a_len      = len(a1)
+    val_set = df.sample(frac=0.1)
+    df.drop(val_set.index)
 
-    bi = 0
-    while bi < a_len:
-        a1b = a1[bi: bi + batch]
-        a2b = a2[bi: bi + batch]
-        feed_dict   = {a1t: a1b,
-                       a2t: a2b}
+    val_dict = {inputs_t: val_set["datas"], 
+                labels_t: val_set["labels"]}
 
-        feed_dicts.append(feed_dict)
+    def train_feed_gen():
+        while True:
+            feed_dicts = []
 
-        bi += batch
+            groups   = np.arange(len(df)) // train_settings["batch_size"]
+            shuffled = df.sample(frac=1)
 
-    return feed_dicts
+            for _, g in shuffled.groupby(groups):
+                train_dict = {inputs_t: g["datas"],
+                              labels_t: g["labels"]}
 
+                feed_dicts.append(train_dict)
+
+            yield feed_dicts
+
+    return val_dict, train_feed_gen

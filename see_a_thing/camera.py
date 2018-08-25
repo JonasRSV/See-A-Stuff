@@ -1,7 +1,7 @@
 import numpy as np
 import cv2
-import see_a_thing.common as common
-import see_a_thing.files as files
+import see_a_thing.utils.common as common
+import see_a_thing.utils.files as files
 import time as time_module
 
 def camera_feed(settings):

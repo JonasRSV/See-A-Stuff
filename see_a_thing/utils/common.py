@@ -2,15 +2,40 @@ import os
 import sys
 import numpy as np
 import cv2
-import see_a_thing.files as files
+import see_a_thing.utils.files as files
 
 def preprocess_image(image):
     #####################
     # Preprocess images #
     #####################
-    reduce_size = cv2.resize(image, (299, 299)) / 256
+    reduce_size = cv2.resize(image, (299, 299))
+    
+    ####################################################
+    # Training is faster with numerical scales -1 -> 1 #
+    # rather than 0 -> 256                             #
+    ####################################################
 
-    return reduce_size
+    rescale_channels = (reduce_size - 128) / 128
+
+    return rescale_channels
+
+
+def unnumpyfy(x):
+    if isinstance(x, list):
+        return list(map(unnumpyfy, x))
+
+    if    isinstance(x, np.float16) 
+       or isinstance(x, np.float32)
+       or isinstance(x, np.float64):
+        return float(x)
+
+    if    isinstance(x, np.int16)
+       or isinstance(x, np.int32)
+       or isinstance(x, np.int64):
+        return int(x)
+
+    return x
+
 
 def decode_bytes(b):
     return list(map(lambda x: x.decode("utf-8"), b))
