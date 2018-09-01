@@ -1,11 +1,15 @@
 #!/usr/local/bin/python3
 import numpy as np
 import argparse
-import see_a_thing as sat
+from see_a_thing.utils import common
+from see_a_thing.utils import files
+from see_a_thing import camera
+from see_a_thing import gym
+from see_a_thing import stage
 import sys
 
 
-DEFAULT_TIME    = 20
+DEFAULT_TIME    = 86000
 DEFAULT_FREQ    = 1
 
 DEFAULT_TRAIN_PATH  = "training"
@@ -13,11 +17,11 @@ DEFAULT_MODEL_PATH  = "model"
 
 DEFAULT_LABEL = "smith"
 
-FUNCTIONS = np.array([sat.camera.record, sat.train.fit, sat.live.monitor, sat.live.serve])
+FUNCTIONS = np.array([camera.record, gym.train, stage.monitor, stage.serve])
 
 
 def main():
-    sat.common.print_logo()
+    common.print_logo()
 
     args    = get_cli_args()
     options = [args.record, args.train, args.commandline, args.websocket] 
@@ -33,18 +37,18 @@ def main():
                 }
 
     if args.fix:
-        sat.common.fix_prequisites(settings)
+        common.fix_prequisites(settings)
 
     if args.clean:
-        sat.files.clean_files(settings)
+        files.clean_files(settings)
 
-    sat.common.check_prequisites(settings)
+    common.check_prequisites(settings)
 
     for function in FUNCTIONS[options]:
         function(settings)
 
     if args.data:
-        sat.files.load_data(settings)
+        files.load_data(settings)
 
 
 def get_cli_args():

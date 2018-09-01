@@ -23,10 +23,10 @@ def get_pred_feed(cam_feed, pred_graph):
             while True:
                 cam_image = next(cam_feed)
 
-                ppim = common.preprocess_image(cam_image)
+                img  = common.preprocess_image(cam_image)
                 p, c = session.run((probs,
                                     category),
-                                   feed_dict={inputs: [image]})
+                                   feed_dict={inputs: [img]})
                                           
 
                 p = p[0]
@@ -36,7 +36,7 @@ def get_pred_feed(cam_feed, pred_graph):
         except StopIteration:
             pass
 
-    return pred_feed, categories
+    return pred_feed(), categories
 
 
 def monitor(settings):
@@ -119,4 +119,6 @@ def serve(settings):
     curses.echo()
     curses.nocbreak()
     curses.endwin()
+
+    sys.exit(0)
 

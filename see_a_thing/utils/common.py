@@ -2,7 +2,7 @@ import os
 import sys
 import numpy as np
 import cv2
-import see_a_thing.utils.files as files
+from see_a_thing.utils import files
 
 def preprocess_image(image):
     #####################
@@ -24,13 +24,16 @@ def unnumpyfy(x):
     if isinstance(x, list):
         return list(map(unnumpyfy, x))
 
-    if    isinstance(x, np.float16) 
-       or isinstance(x, np.float32)
+    if isinstance(x, np.ndarray):
+        return list(map(unnumpyfy, x))
+
+    if    isinstance(x, np.float16)\
+       or isinstance(x, np.float32)\
        or isinstance(x, np.float64):
         return float(x)
 
-    if    isinstance(x, np.int16)
-       or isinstance(x, np.int32)
+    if    isinstance(x, np.int16)\
+       or isinstance(x, np.int32)\
        or isinstance(x, np.int64):
         return int(x)
 

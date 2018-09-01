@@ -11,7 +11,7 @@ import pandas as pd
 train_settings = {"batch_size": 16,
                   "epochs": 5}
 
-def fit(settings):
+def train(settings):
 
     if settings["overwrite"]:
         files.remove_model_directory(settings)
@@ -63,7 +63,7 @@ def fit(settings):
         session.close()
 
 
-def validate(inputs, val_dict, graph, summary_writer)
+def validate(inputs, val_dict, graph, summary_writer):
     print("Todo: Validation")
 
 

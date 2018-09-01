@@ -1,3 +1,3 @@
 from see_a_thing import camera
-from see_a_thing import live
-from see_a_thing import train
+from see_a_thing import stage
+from see_a_thing import gym
