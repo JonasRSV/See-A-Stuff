@@ -27,7 +27,7 @@ def train(settings):
     #############################################
 
     with tf.Session() as session:
-        learn_ops, ep_summaries, val_summaries, u_ops = graph.get_learn_and_summaries_tensors()
+        learn_ops, ep_summaries, val_summaries = graph.get_learn_and_summaries_tensors()
 
         global_step = tf.train.get_global_step()
         summary_writer = tf.summary.FileWriter("./summaries", 
@@ -48,7 +48,7 @@ def train(settings):
 
                 summary_writer.add_summary(summaries, step)
 
-            summaries, _ = session.run((val_summaries, u_ops), feed_dict=val_feed)
+            summaries = session.run((val_summaries), feed_dict=val_feed)
             summary_writer.add_summary(summaries, ep)
 
         summary_writer.flush()

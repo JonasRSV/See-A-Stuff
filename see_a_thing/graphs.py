@@ -4,6 +4,23 @@ import shutil
 import see_a_thing.modules.inception as inception
 
 
+def precision_recall(logits, labels):
+    score = tf.cast(tf.argmax(logits, axis=0), tf.int32) != tf.cast(tf.argmax(labels, axis=0), tf.int32)
+
+    precision = tf.reduce_sum(tf.cast(score, tf.float32)) #/ tf.cast(tf.shape(logits)[0], tf.float32)
+
+    # true_positives  = tf.logical_and(score, label_bools)
+    # false_negatives = tf.logical_and(tf.logical_not(score), label_bools)
+
+    # num_true_positives  = tf.reduce_sum(tf.cast(true_positives, tf.float32))
+    # num_false_negatives = tf.reduce_sum(tf.cast(false_negatives, tf.float32))
+
+    # recall = num_true_positives / (num_true_positives + num_false_negatives)
+
+    return tf.cast(tf.shape(logits)[0], tf.float32)
+
+
+
 def minizeption_network(x):
     x = tf.layers.conv2d(x, 64, 7, 2)
     x = tf.layers.max_pooling2d(x, 3, 2)
@@ -98,15 +115,14 @@ class GraphBuilder(object):
         validate_indexes = tf.random_uniform([VALIDATE_VISUALIZE], minval=0, maxval=val_batch, dtype=tf.int32) 
         val_summary_ims  = tf.summary.image("validate", tf.gather(self.inputs, validate_indexes), max_outputs=VALIDATE_VISUALIZE)
 
-        u_op_precision, precision = tf.metrics.precision(self.labels, logits)
-        u_op_recall, recall       = tf.metrics.recall(self.labels, logits)
+        precision = precision_recall(logits, self.labels)
 
         val_summary_precision = tf.summary.scalar("validate/precision", precision)
-        val_summary_recall    = tf.summary.scalar("validate/recall", recall)
+        # val_summary_recall    = tf.summary.scalar("validate/recall", recall)
 
-        validation_summaries = tf.summary.merge([val_summary_ims, val_summary_precision, val_summary_recall])
+        validation_summaries = tf.summary.merge([val_summary_ims, val_summary_precision])
 
-        return optimizer, training_summaries, validation_summaries, [u_op_precision, u_op_recall]
+        return optimizer, training_summaries, validation_summaries 
 
     def save_graph(model_directory):
         builder = tf.saved_model.builder.SavedModelBuilder(model_directory)
