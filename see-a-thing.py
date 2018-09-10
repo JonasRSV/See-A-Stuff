@@ -1,4 +1,3 @@
-#!/usr/local/bin/python3
 import numpy as np
 import argparse
 from see_a_thing.utils import common
