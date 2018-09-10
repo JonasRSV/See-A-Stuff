@@ -8,7 +8,7 @@ import tensorflow as tf
 
 
 train_settings = {"batch_size": 16,
-                  "epochs": 100}
+                  "epochs": 2}
 
 def train(settings):
 
@@ -27,7 +27,7 @@ def train(settings):
     #############################################
 
     with tf.Session() as session:
-        learn_ops, summaries_ops = graph.get_learn_and_summaries_tensors()
+        learn_ops, ep_summaries, val_summaries, u_ops = graph.get_learn_and_summaries_tensors()
 
         global_step = tf.train.get_global_step()
         summary_writer = tf.summary.FileWriter("./summaries", 
@@ -35,20 +35,21 @@ def train(settings):
                                                graph=session.graph)
 
         session.run(tf.global_variables_initializer())
+        session.run(tf.local_variables_initializer())
 
         for ep in range(train_settings["epochs"]):
             train_dicts = next(train_feed_gen)
 
-            summary = tf.Summary()
-
             for train_dict in train_dicts:
                 _, summaries, step = session.run((learn_ops, 
-                                                  summaries_ops,
+                                                  ep_summaries,
                                                   global_step),
                                                  feed_dict=train_dict)
 
                 summary_writer.add_summary(summaries, step)
 
+            summaries, _ = session.run((val_summaries, u_ops), feed_dict=val_feed)
+            summary_writer.add_summary(summaries, ep)
 
         summary_writer.flush()
         summary_writer.close()
@@ -56,10 +57,6 @@ def train(settings):
         graphs.GraphBuilder.save_graph(settings["model_path"])
 
         session.close()
-
-
-def validate(val_feed, epoch):
-    print("Todo: Validation")
 
 
 def get_val_and_train_feed(datas, labels, inputs_t, labels_t):

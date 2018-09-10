@@ -29,7 +29,7 @@ class GraphBuilder(object):
 
     INIT_LEARNING_RATE = 0.001
     LR_DECAY_STEPS     = 10000
-    LR_DECAY_RATE      = 0.999
+    LR_DECAY_RATE      = 0.96
     LR_STAIRCASE       = False
 
     def of(im_dims, categories):
@@ -87,10 +87,26 @@ class GraphBuilder(object):
                           global_step=global_step)
 
 
-        tf.summary.scalar("loss", loss)
-        tf.summary.scalar("learning rate", lr)
+        loss_summary = tf.summary.scalar("training/loss", loss)
+        lr_summary   = tf.summary.scalar("training/learning rate", lr)
 
-        return optimizer, tf.summary.merge_all()
+        training_summaries = tf.summary.merge([loss_summary, lr_summary])
+
+        VALIDATE_VISUALIZE = 3
+
+        val_batch  = tf.shape(self.inputs)[0]
+        validate_indexes = tf.random_uniform([VALIDATE_VISUALIZE], minval=0, maxval=val_batch, dtype=tf.int32) 
+        val_summary_ims  = tf.summary.image("validate", tf.gather(self.inputs, validate_indexes), max_outputs=VALIDATE_VISUALIZE)
+
+        u_op_precision, precision = tf.metrics.precision(self.labels, logits)
+        u_op_recall, recall       = tf.metrics.recall(self.labels, logits)
+
+        val_summary_precision = tf.summary.scalar("validate/precision", precision)
+        val_summary_recall    = tf.summary.scalar("validate/recall", recall)
+
+        validation_summaries = tf.summary.merge([val_summary_ims, val_summary_precision, val_summary_recall])
+
+        return optimizer, training_summaries, validation_summaries, [u_op_precision, u_op_recall]
 
     def save_graph(model_directory):
         builder = tf.saved_model.builder.SavedModelBuilder(model_directory)
