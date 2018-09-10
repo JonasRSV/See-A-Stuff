@@ -15,7 +15,7 @@ def camera_feed(settings):
     print("\nCamera Recording For {} Seconds With a Frequency Of {} Hz"
             .format(settings["time"], settings["frequency"]))
 
-    capture = cv2.VideoCapture(0)
+    capture = cv2.VideoCapture(-1)
     try:
         while time_module.time() <= record_until:
             ret, frame = capture.read()

@@ -27,10 +27,10 @@ class GraphBuilder(object):
     CATEGORIES_NAME   = "categories"
 
 
-    INIT_LEARNING_RATE = 0.0001
+    INIT_LEARNING_RATE = 0.001
     LR_DECAY_STEPS     = 10000
-    LR_DECAY_RATE      = 0.96
-    LR_STAIRCASE       = True
+    LR_DECAY_RATE      = 0.999
+    LR_STAIRCASE       = False
 
     def of(im_dims, categories):
         _, Y, X, channels = im_dims

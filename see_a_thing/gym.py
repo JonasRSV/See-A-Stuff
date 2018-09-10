@@ -8,7 +8,7 @@ import tensorflow as tf
 
 
 train_settings = {"batch_size": 16,
-                  "epochs": 5}
+                  "epochs": 100}
 
 def train(settings):
 
@@ -38,6 +38,9 @@ def train(settings):
 
         for ep in range(train_settings["epochs"]):
             train_dicts = next(train_feed_gen)
+
+            summary = tf.Summary()
+
             for train_dict in train_dicts:
                 _, summaries, step = session.run((learn_ops, 
                                                   summaries_ops,
@@ -55,7 +58,7 @@ def train(settings):
         session.close()
 
 
-def validate():
+def validate(val_feed, epoch):
     print("Todo: Validation")
 
 

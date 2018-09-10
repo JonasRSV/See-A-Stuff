@@ -98,7 +98,7 @@ def check_training_directory(settings):
     training_root = settings["training_path"]
 
     if not os.path.isdir(training_root):
-        sys.stderr.write("\n" + provided_root + "\nis not a valid directory"
+        sys.stderr.write("\n" + training_root + "\nis not a valid directory"
                    + "\nplease provide an absolute path")
 
         sys.stderr.write("\nPrequisite Check Failed.")

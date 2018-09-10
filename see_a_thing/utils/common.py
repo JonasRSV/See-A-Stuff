@@ -14,7 +14,6 @@ def preprocess_image(image):
     # Training is faster with numerical scales -1 -> 1 #
     # rather than 0 -> 256                             #
     ####################################################
-
     rescale_channels = (reduce_size - 128) / 128
 
     return rescale_channels
