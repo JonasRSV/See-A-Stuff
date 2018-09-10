@@ -40,6 +40,7 @@ class GraphBuilder(object):
     LR_DECAY_STEPS     = 10000
     LR_DECAY_RATE      = 0.60
     LR_STAIRCASE       = False
+    L2_COEFFICIENT     = 1e-0
 
     def of(im_dims, categories):
         _, Y, X, channels = im_dims
@@ -60,9 +61,10 @@ class GraphBuilder(object):
         self.categories     = tf.constant(categories, name=GraphBuilder.CATEGORIES_NAME)
 
     def build_classifier(self):
-        features = minizeption_network(self.inputs)
-        logits   = tf.layers.dense(features, self.num_categories, activation=None)
-        odds     = tf.nn.softmax(logits)
+        with tf.variable_scope("classifier"):
+            features = minizeption_network(self.inputs)
+            logits   = tf.layers.dense(features, self.num_categories, activation=None)
+            odds     = tf.nn.softmax(logits)
 
         #####################
         # For the Live View #
@@ -79,10 +81,20 @@ class GraphBuilder(object):
     def get_learn_and_summaries_tensors(self):
 
         logits, self.odds = self.build_classifier()
-        loss = tf.reduce_mean(
-                tf.nn.softmax_cross_entropy_with_logits_v2(
-                    labels=self.labels,
-                    logits=logits))
+        pred_loss = tf.reduce_mean(
+                    tf.nn.softmax_cross_entropy_with_logits_v2(
+                        labels=self.labels,
+                        logits=logits))
+
+                    
+        """ Add L2-Regularization """
+        classifier_variables  = tf.concat(
+                [tf.reshape(variable, [-1]) for variable in tf.get_collection(tf.GraphKeys.TRAINABLE_VARIABLES, scope="classifier")],
+                0)
+
+        l2_penalty            = tf.reduce_mean(tf.square(classifier_variables))
+
+        loss = pred_loss + GraphBuilder.L2_COEFFICIENT * l2_penalty
 
         global_step = tf.train.create_global_step()
         lr          = tf.train.exponential_decay(GraphBuilder.INIT_LEARNING_RATE,
@@ -96,12 +108,15 @@ class GraphBuilder(object):
                           global_step=global_step)
 
 
-        loss_summary = tf.summary.scalar("training/loss", loss)
-        lr_summary   = tf.summary.scalar("training/learning rate", lr)
 
-        training_summaries = tf.summary.merge([loss_summary, lr_summary])
+        loss_summary       = tf.summary.scalar("training/loss", loss)
+        pred_loss_summary  = tf.summary.scalar("training/pred_loss", pred_loss)
+        l2_penalty_summary = tf.summary.scalar("training/l2_penalty", l2_penalty)
+        lr_summary         = tf.summary.scalar("training/learning rate", lr)
 
-        VALIDATE_VISUALIZE = 3
+        training_summaries = tf.summary.merge([loss_summary, pred_loss_summary, l2_penalty_summary, lr_summary])
+
+        VALIDATE_VISUALIZE = 4
 
         val_batch  = tf.shape(self.inputs)[0]
         validate_indexes = tf.random_uniform([VALIDATE_VISUALIZE], minval=0, maxval=val_batch, dtype=tf.int32) 

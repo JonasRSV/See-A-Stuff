@@ -11,10 +11,10 @@ def preprocess_image(image):
     reduce_size = cv2.resize(image, (299, 299))
     
     ####################################################
-    # Training is faster with numerical scales -1 -> 1 #
-    # rather than 0 -> 256                             #
+    # Training is faster with numerical scales 0 -> 1  #
+    # rather than 0 -> 256, because reasons.. :o       #
     ####################################################
-    rescale_channels = (reduce_size - 128) / 128
+    rescale_channels = (reduce_size) / 256
 
     return rescale_channels
 
