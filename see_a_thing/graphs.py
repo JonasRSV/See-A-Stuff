@@ -1,23 +1,15 @@
 import tensorflow as tf
-import os
-import shutil
 import see_a_thing.modules.inception as inception
 
 
 def precision_recall(logits, labels):
-    score = tf.cast(tf.argmax(logits, axis=0), tf.int32) != tf.cast(tf.argmax(labels, axis=0), tf.int32)
+    score = tf.equal(tf.argmax(logits, axis=1), tf.argmax(labels, axis=1))
 
-    precision = tf.reduce_sum(tf.cast(score, tf.float32)) #/ tf.cast(tf.shape(logits)[0], tf.float32)
+    precision = tf.reduce_sum(tf.cast(score, tf.float32)) / tf.cast(tf.shape(logits)[0], tf.float32)
 
-    # true_positives  = tf.logical_and(score, label_bools)
-    # false_negatives = tf.logical_and(tf.logical_not(score), label_bools)
+    # TODO: Implement multiclass recall
 
-    # num_true_positives  = tf.reduce_sum(tf.cast(true_positives, tf.float32))
-    # num_false_negatives = tf.reduce_sum(tf.cast(false_negatives, tf.float32))
-
-    # recall = num_true_positives / (num_true_positives + num_false_negatives)
-
-    return tf.cast(tf.shape(logits)[0], tf.float32)
+    return precision
 
 
 
@@ -46,7 +38,7 @@ class GraphBuilder(object):
 
     INIT_LEARNING_RATE = 0.001
     LR_DECAY_STEPS     = 10000
-    LR_DECAY_RATE      = 0.90
+    LR_DECAY_RATE      = 0.60
     LR_STAIRCASE       = False
 
     def of(im_dims, categories):
