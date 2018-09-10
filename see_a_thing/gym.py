@@ -8,7 +8,7 @@ import tensorflow as tf
 
 
 train_settings = {"batch_size": 32,
-                  "epochs": 200}
+                  "epochs": 50}
 
 def train(settings):
 

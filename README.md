@@ -7,6 +7,7 @@
 ###  [Detection](#detection-implementation)
   *  [Minizeption](#minizeption)
 ###  [Usage](#usage-1)
+###  [Demo Kind Of](#demo)
 
 
 ## Introduction
@@ -128,4 +129,13 @@ Add more data for thing1 if you want
 
 ```
 
+<br/>
+<br/>
+<br/>
+
+## Demo
+The commandline UI while im walking in and out of the view field at different
+<a href="https://giphy.com/gifs/jxa5HFQeS3CLO2Sxdm"> <img width=500px src="https://media.giphy.com/media/cmznO5bvJmuBZZQJSC/giphy.gif" title="Pendelum demo"/></a>
+
+<br/>
 

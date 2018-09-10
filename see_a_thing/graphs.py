@@ -38,9 +38,9 @@ class GraphBuilder(object):
 
     INIT_LEARNING_RATE = 0.001
     LR_DECAY_STEPS     = 10000
-    LR_DECAY_RATE      = 0.60
+    LR_DECAY_RATE      = 0.01
     LR_STAIRCASE       = False
-    L2_COEFFICIENT     = 1e-0
+    L2_COEFFICIENT     = 1e+1
 
     def of(im_dims, categories):
         _, Y, X, channels = im_dims
@@ -92,9 +92,9 @@ class GraphBuilder(object):
                 [tf.reshape(variable, [-1]) for variable in tf.get_collection(tf.GraphKeys.TRAINABLE_VARIABLES, scope="classifier")],
                 0)
 
-        l2_penalty            = tf.reduce_mean(tf.square(classifier_variables))
+        l2_penalty = tf.reduce_mean(tf.square(classifier_variables)) * GraphBuilder.L2_COEFFICIENT
 
-        loss = pred_loss + GraphBuilder.L2_COEFFICIENT * l2_penalty
+        loss = pred_loss + l2_penalty
 
         global_step = tf.train.create_global_step()
         lr          = tf.train.exponential_decay(GraphBuilder.INIT_LEARNING_RATE,
