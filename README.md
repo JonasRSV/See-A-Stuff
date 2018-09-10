@@ -134,7 +134,8 @@ Add more data for thing1 if you want
 <br/>
 
 ## Demo
-<a href="https://giphy.com/gifs/jxa5HFQeS3CLO2Sxdm"> <img width=900px src="https://media.giphy.com/media/cmznO5bvJmuBZZQJSC/giphy.gif" title="Pendelum demo"/></a>
+
+TODO
 
 <br/>
 
