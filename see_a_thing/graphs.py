@@ -29,7 +29,7 @@ class GraphBuilder(object):
 
     INIT_LEARNING_RATE = 0.001
     LR_DECAY_STEPS     = 10000
-    LR_DECAY_RATE      = 0.96
+    LR_DECAY_RATE      = 0.90
     LR_STAIRCASE       = False
 
     def of(im_dims, categories):
