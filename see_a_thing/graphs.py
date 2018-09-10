@@ -20,8 +20,6 @@ def minizeption_network(x):
     return features
 
 
-    
-
 class GraphBuilder(object):
     INPUTS_NAME       = "inputs"
     PROBABILITES_NAME = "probabilites"

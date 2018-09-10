@@ -53,7 +53,7 @@ def load_data(settings):
                     .format(data_file, num_images))
 
     print()
-    return np.concatenate(datas), labels, categories
+    return np.concatenate(datas), np.array(labels), categories
 
 def check_file_prequisites(settings):
 

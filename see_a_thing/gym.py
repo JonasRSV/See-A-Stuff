@@ -5,7 +5,6 @@ import time as time_module
 import see_a_thing.utils.files as files
 import see_a_thing.graphs as graphs
 import tensorflow as tf
-import pandas as pd
 
 
 train_settings = {"batch_size": 16,
@@ -21,7 +20,7 @@ def train(settings):
                                                        categories)
 
 
-    val_feed, train_gen_feed = get_val_and_train_feed(datas, labels, inputs_t, labels_t)
+    val_feed, train_feed_gen = get_val_and_train_feed(datas, labels, inputs_t, labels_t)
 
     #############################################
     # Prepair session, summary writer and graph #
@@ -48,13 +47,6 @@ def train(settings):
                 summary_writer.add_summary(summaries, step)
 
 
-        validate_training(inputs, 
-                          graph.odds, 
-                          data_validation, 
-                          label_validation, 
-                          categories, 
-                          summary_writer)
-
         summary_writer.flush()
         summary_writer.close()
 
@@ -63,32 +55,36 @@ def train(settings):
         session.close()
 
 
-def validate(inputs, val_dict, graph, summary_writer):
+def validate():
     print("Todo: Validation")
 
 
 def get_val_and_train_feed(datas, labels, inputs_t, labels_t):
-    df = pd.DataFrame(data={"datas": datas, "labels": labels})
+    dsize = len(datas)
 
-    val_set = df.sample(frac=0.1)
-    df.drop(val_set.index)
+    indexes = np.arange(dsize)
 
-    val_dict = {inputs_t: val_set["datas"], 
-                labels_t: val_set["labels"]}
+    np.random.shuffle(indexes)
+
+    train_indexes    = indexes[int(dsize * 0.1):]
+    validate_indexes = indexes[:int(dsize * 0.1)]
+
+    val_dict = {inputs_t: datas[validate_indexes], 
+                labels_t: labels[validate_indexes]}
 
     def train_feed_gen():
         while True:
             feed_dicts = []
 
-            groups   = np.arange(len(df)) // train_settings["batch_size"]
-            shuffled = df.sample(frac=1)
+            np.random.shuffle(train_indexes)
 
-            for _, g in shuffled.groupby(groups):
-                train_dict = {inputs_t: g["datas"],
-                              labels_t: g["labels"]}
+            for d, l in zip(np.array_split(datas[train_indexes], dsize // train_settings["batch_size"]),
+                            np.array_split(labels[train_indexes], dsize // train_settings["batch_size"])):
+                train_dict = {inputs_t: d,
+                              labels_t: l}
 
                 feed_dicts.append(train_dict)
 
             yield feed_dicts
 
-    return val_dict, train_feed_gen
+    return val_dict, train_feed_gen()
