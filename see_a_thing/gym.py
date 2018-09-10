@@ -7,8 +7,8 @@ import see_a_thing.graphs as graphs
 import tensorflow as tf
 
 
-train_settings = {"batch_size": 16,
-                  "epochs": 2}
+train_settings = {"batch_size": 32,
+                  "epochs": 200}
 
 def train(settings):
 
