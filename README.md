@@ -144,4 +144,5 @@ TODO
 * 100 sceonds of 10 hz recording of me in different of the camera view
 ![Imgur](https://i.imgur.com/XTLvcci.png)
 
-<a> <img width=351px src="demo.gif" title="demo"/></a>
+## Walking in and out of the cameras 
+<a> <img width=800px src="demo.gif" title="demo"/></a>
