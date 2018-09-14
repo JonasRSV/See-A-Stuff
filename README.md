@@ -144,7 +144,4 @@ TODO
 * 100 sceonds of 10 hz recording of me in different of the camera view
 ![Imgur](https://i.imgur.com/XTLvcci.png)
 
-<video width="320" height="240" controls>
-  <source src="Demo.mov" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
+<video width="320" height="240" src="Demo.mov" type="video/mp4" controls/>
