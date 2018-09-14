@@ -144,4 +144,4 @@ TODO
 * 100 sceonds of 10 hz recording of me in different of the camera view
 ![Imgur](https://i.imgur.com/XTLvcci.png)
 
-<video src="demo.mov" type="video/mp4" controls/>
+<a> <img width=351px src="demo.gif" title="demo"/></a>
