@@ -148,6 +148,7 @@ Add more data for thing1 if you want
 <br/>
 
 * CLI UI showing results when i'm walkin in and out of the camera view at different positions
+* Update rate is 10hz but looks slower on the GIF
 
 <br/>
 
