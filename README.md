@@ -135,14 +135,16 @@ Add more data for thing1 if you want
 
 ## Demo
 
-TODO
-
-<br/>
 
 ### Training Period
 * 100 seconds of 10 hz recording of empty background
-* 100 sceonds of 10 hz recording of me in different of the camera view
+* 100 seconds of 10 hz recording of me walking around in camera view
 ![Imgur](https://i.imgur.com/XTLvcci.png)
 
-## Walking in and out of the cameras 
+<br/>
+
+* CLI UI showing results when i'm walkin in and out of the camera view at different positions
+
+<br/>
+
 <a> <img width=800px src="demo.gif" title="demo"/></a>
