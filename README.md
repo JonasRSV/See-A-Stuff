@@ -139,6 +139,10 @@ Add more data for thing1 if you want
 ### Training Period
 * 100 seconds of 10 hz recording of empty background
 * 100 seconds of 10 hz recording of me walking around in camera view
+* 50 epochs 
+
+<br/>
+
 ![Imgur](https://i.imgur.com/XTLvcci.png)
 
 <br/>
